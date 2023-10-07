@@ -84,14 +84,35 @@ Displays errors and issues that occur during various processes, helping users tr
 
 Below are some of the key functions defined in the `App.js`:
 
-- `handleLoginSuccess`: Handles the process after a successful login.
-- `handleLoginFailure`: Handles the process after a login failure.
-- `handleGeneration`: Orchestrates the content generation process.
-- `getSelectedRows`: Retrieves selected rows from the spreadsheet data.
-- `validateRows`: Validates the selected rows to ensure all required fields are filled.
-- `prepareData`: Prepares data for content generation.
-- `initiateContentGeneration`: Initiates the content generation API call.
-- `handleGenerationResponse`: Handles the response from the content generation API.
+FileSelection Component
+The FileSelection component in the project provides an interface for users to select files from Google Drive, specifically Google Sheets. The core functionalities and components embedded in this component are:
+
+Features:
+Drive Picker Integration: The component uses react-google-drive-picker to integrate Google Drive's file and folder picker, allowing users to select spreadsheets directly from their Google Drive and also choose a destination folder for the generated content.
+
+File and URL Input: Users can either select a Google Sheet from their Drive or input a custom URL.
+
+Spreadsheet Data Retrieval: Upon selecting a file or providing a custom URL, the component fetches the data from the spreadsheet using the fetchSpreadsheetData service.
+
+Progress Tracking: The component provides a progress bar that calculates the percentage of tasks completed in the process.
+
+Error Handling: Errors during the various stages, from file selection to content generation, are captured and displayed to the user.
+
+Content Generation: After selecting rows from the fetched spreadsheet data, users can generate content, which is then saved to a Google Doc in the chosen destination folder.
+
+Components Breakdown:
+Loadable: A wrapper component to show a loading spinner while async operations are being performed.
+FileURLInput: Component for users to input a custom Google Sheets URL.
+SpreadsheetActions: Provides action buttons for row selection and content generation.
+SpreadsheetDisplay: Displays the selected rows from the fetched spreadsheet data.
+Notable Functions:
+handleGenerateContentFromCustom: Fetches spreadsheet data from the provided custom URL.
+handleSheetPicker & handleFolderPicker: Initiates the Google Drive picker for files and folders, respectively.
+handleDeleteFile & handleDeleteDestination: Deletes the selected file and destination, respectively.
+resetError: Clears any displayed errors.
+handleGenerateContent: Orchestrates the content generation process based on selected rows and destination folder.
+generateContentSuccessCallback: Actions to perform upon successful content generation.
+
 
 ## Development
 
