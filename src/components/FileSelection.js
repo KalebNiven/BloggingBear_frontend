@@ -159,7 +159,7 @@ function FileSelection() {
             {error && error.length > 0 &&
                 <div className='row mt-4'>
                     <div className='col-md-12'>
-                        <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center px-4 mb-0" role="alert">
+                        <div className="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center px-4 mb-0" role="alert">
                             <strong>Error!</strong> {error}
                             <button onClick={resetError} type="button" className='btn btn-transparent p-0'>
                                 <i className='fas fa-times'></i>
