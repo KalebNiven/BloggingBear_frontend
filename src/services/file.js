@@ -22,7 +22,9 @@ export async function generateContent(payload, callback, errorCallback) {
         // Update your state or do something with the data
         callback(response.data.data)
     } catch (error) {
-        errorCallback("Error generating report. Please contact administrator");
+        if (error && error.response && error.response.data) {
+            errorCallback(error.response.data.error);
+        }
         console.error('Error generating report:', error);
     }
 }

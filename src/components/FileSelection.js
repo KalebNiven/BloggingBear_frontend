@@ -33,7 +33,7 @@ function FileSelection() {
 
     const fetchSpreadsheetCallback = (_response) => {
         setLoading(false);
-        setSheetRows(_response);
+        setSheetRows(_response.map((item, index) => ({ ...item, row_no: index + 2 })));
         if (selectedFile === null) {
             setSelectedFile({ name: 'file' })
         }
