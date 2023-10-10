@@ -9,7 +9,7 @@ function SpreadsheetDisplay({ selectedRows }) {
                 </div>
                 <div className="card-body">
                     <div className='sheet-display-div'>
-                        <table class="table table-bordered table-striped">
+                        <table className="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th className='text-center' scope="col">#</th>
