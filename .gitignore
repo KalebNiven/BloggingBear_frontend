@@ -24,3 +24,7 @@ yarn-error.log*
 
 #environment
 .env
+.env.development
+.env.production
+
+config.js

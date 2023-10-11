@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 // import { fetchSpreadsheetData } from './Utilities'; // Adjust the path accordingly
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export async function fetchSpreadsheetData(sheetUrl, setSpreadsheet) {
   try {
-      // Replace 'https://localhost:5000' with your Flask app's URL
-      const response = await fetch(`https://localhost:5000/get-spreadsheet-data?sheetUrl=${encodeURIComponent(sheetUrl)}`);
+      const response = await fetch(`${API_URL}/get-spreadsheet-data?sheetUrl=${encodeURIComponent(sheetUrl)}`);
       
       if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
@@ -38,7 +39,7 @@ function SpreadsheetInput({ setError, setSpreadsheet }) {
   formData.append('file', file);
   
   try {
-      const response = await axios.post('https://localhost:5000/upload-file', formData);
+      const response = await axios.post(`${API_URL}/upload-file`, formData);
   
       if (response.data) {
         // Update the rows state with the data returned from the server

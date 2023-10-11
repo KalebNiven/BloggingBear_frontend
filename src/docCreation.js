@@ -1,4 +1,4 @@
-
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const handleGeneration = async () => {
 	try {
@@ -43,7 +43,7 @@ export const handleGeneration = async () => {
 		setProgress(35); // Updated progress after preparing the data
 
 		// Step 3: Initiate content generation
-		const response = await axios.post('http://localhost:5000/generate-content', { 
+		const response = await axios.post(`${API_URL}/generate-content`, { 
 			data: preparedData,
 			max_tokens: Number(maxTokens),  // Include max_tokens in the payload
 		});
