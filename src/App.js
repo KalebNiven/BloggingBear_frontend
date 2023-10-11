@@ -24,7 +24,7 @@ function App() {
 
         try {
             const token = response.tokenId; // Adjust this to correctly get the token from the response
-            const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID // replace with your client ID
+            const client_id = process.env.REACT_APP_CLIENT_ID // replace with your client ID
             const data = await sendTokenToServer(token, client_id);
             if (data.email) {
                 setEmail(data.email);
@@ -151,7 +151,7 @@ function App() {
             handleLoginSuccess(response);
             // Now you have the token, which can be used to authenticate API requests
             const token = response.tokenId;
-            const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+            const client_id = process.env.REACT_APP_CLIENT_ID;
             sendTokenToServer(token, client_id);
             console.log("Google auth successful, token obtained: ", token);
         } else {
