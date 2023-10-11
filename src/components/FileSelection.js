@@ -5,7 +5,6 @@ import FileURLInput from './FileURLInput';
 import { fetchSpreadsheetData, generateContent } from '../services/file';
 import SpreadsheetActions from './SpreadsheetActions';
 import SpreadsheetDisplay from './SpreadSheetDisplay';
-import { config } from '../config';
 
 function FileSelection() {
     const [openPicker, authResponse] = useDrivePicker();
@@ -46,8 +45,8 @@ function FileSelection() {
 
     const handleSheetPicker = () => {
         openPicker({
-            clientId: config.clientId,
-            developerKey: config.developerKey,
+            clientId: process.env.REACT_APP_CLIENT_ID,
+            developerKey: process.env.REACT_APP_DEVELOPER_KEY,
             viewId: "SPREADSHEETS",
             // token: token, // pass oauth token in case you already have one
             showUploadView: false,
@@ -67,8 +66,8 @@ function FileSelection() {
 
     const handleFolderPicker = () => {
         openPicker({
-            clientId: config.clientId,
-            developerKey: config.developerKey,
+            clientId: process.env.REACT_APP_CLIENT_ID,
+            developerKey: process.env.REACT_APP_DEVELOPER_KEY,
             viewId: "FOLDERS",
             // token: token, // pass oauth token in case you already have one
             showUploadView: false,

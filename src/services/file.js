@@ -1,10 +1,9 @@
 import axios from "axios";
-import { config } from "../config";
 
 export async function fetchSpreadsheetData(sheetUrl, callback, errorCallback) {
     try {
         // Replace 'https://localhost:5000' with your Flask app's URL
-        const response = await axios.post(`${config.apiURL}/get-spreadsheet-data`, { sheet_url: sheetUrl });
+        const response = await axios.post(`${process.env.REACT_APP_API_KEY}/get-spreadsheet-data`, { sheet_url: sheetUrl });
 
         // Update your state or do something with the data
         callback(response.data.data)
@@ -17,7 +16,7 @@ export async function fetchSpreadsheetData(sheetUrl, callback, errorCallback) {
 export async function generateContent(payload, callback, errorCallback) {
     try {
         // Replace 'https://localhost:5000' with your Flask app's URL
-        const response = await axios.post(`${config.apiURL}/generate-content`, payload);
+        const response = await axios.post(`${process.env.REACT_APP_API_KEY}/generate-content`, payload);
 
         // Update your state or do something with the data
         callback(response.data.data)
