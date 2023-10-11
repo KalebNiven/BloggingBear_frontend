@@ -16,6 +16,8 @@ function App() {
     const [maxTokens, setMaxTokens] = useState(750);
     const [email, setEmail] = useState(null);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const handleLoginSuccess = async (response) => {
         console.log('Login Success:', response.profileObj);
         setUserData(response.profileObj);
@@ -98,7 +100,7 @@ function App() {
     };
 
     const initiateContentGeneration = (data) => {
-        return axios.post('https://localhost:5000/generate-content', {
+        return axios.post(`${API_URL}/generate-content`, {
             data,
             max_tokens: Number(maxTokens),
         });
