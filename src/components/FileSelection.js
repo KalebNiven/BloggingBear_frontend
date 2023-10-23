@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useDrivePicker from 'react-google-drive-picker';
 import Loadable from './Loadable';
 import FileURLInput from './FileURLInput';
-import { fetchSpreadsheetData, generateContent } from '../services/file';
+import { fetchSpreadsheetData, generateContent, getTaskStatus } from '../services/file';
 import SpreadsheetActions from './SpreadsheetActions';
 import SpreadsheetDisplay from './SpreadSheetDisplay';
 
@@ -15,8 +15,11 @@ function FileSelection() {
     const [sheetRows, setSheetRows] = useState([]);
     const [selectedRow, setSelectedRow] = useState('');
     const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedRowsDetails, setSelectedRowsDetails] = useState([]);
     const [error, setError] = useState(null);
-    const [isGenerating, setGenerating] = useState(false);
+    const [currentTaskId, setTaskId] = useState(null);
+
+    const [ideaArray, setIdeaArray] = useState([]);
 
     useEffect(() => {
         if (selectedFile && selectedFile.embedUrl) {
@@ -99,27 +102,96 @@ function FileSelection() {
         setError(null);
     }
 
-    const handleGenerateContent = async (data) => {
+    const handleGenerateContent = (data) => {
         if (selectedDestination === null) {
             setError("Please select a destination folder");
         }
         if (data.length === 0) {
-            setSelectedRows([...sheetRows])
+            setSelectedRows([...sheetRows]);
+            setSelectedRowsDetails(new Array(tempRows.length).fill({ error: '', progress: 0, docurl: '' }))
         }
+
+        const tempRows = data.length === 0 ? [...sheetRows] : [...data];
+
+        recurAPIsBasedOnStatus([...tempRows], 0);
+    }
+
+    const recurAPIsBasedOnStatus = async (tempRows, round) => {
+        const loopItem = tempRows[round];
+
+
+
+        if (!loopItem) return
         try {
             setLoading(true);
-            setGenerating(true);
+
             let payload = {
-                data: data.length === 0 ? sheetRows : data, // pass all data if selectedRows are empty
+                data: [loopItem], // pass all data if selectedRows are empty
                 max_tokens: 800,
                 folder_id: selectedDestination.id
             };
-            await generateContent(payload, generateContentSuccessCallback, errorCallback);
+            const startProcessingRes = await generateContent(payload, errorCallback);
+
+            const taskStatusInterval = setInterval(async () => {
+                setLoading(true);
+
+                const taskRes = await getTaskStatus(startProcessingRes.task_id, errorCallback);
+
+                if (taskRes && taskRes.error === false && taskRes.data.status === 'In Progress') {
+
+
+                    const tempDetails = selectedRowsDetails.map((srd, index) => {
+                        if (parseInt(index) === parseInt(round)) {
+                            return { progress: taskRes.data.percentage_done ? parseInt(taskRes.data.percentage_done) : 0, error: '', docurl: '' }
+                        }
+                        return srd
+                    })
+                    setSelectedRowsDetails(tempDetails);
+
+                } else if (taskRes && taskRes.error === false && taskRes.data.status === 'Completed') {
+
+                    // const tempDetails = selectedRowsDetails.map((srd, index) => {
+                    //     if (parseInt(index) === parseInt(round)) {
+                    //         return { progress: 100, docurl: taskRes.data.docurl, error: '', }
+                    //     }
+                    //     return srd
+                    // })
+                    // setSelectedRowsDetails(tempDetails);
+
+                    setIdeaArray(prev => [...prev, { progress: 100, docurl: taskRes.data.docurl, error: '', }])
+
+
+                    clearInterval(taskStatusInterval);
+                    setLoading(false);
+
+                    recurAPIsBasedOnStatus(selectedRows, round + 1);
+                } else if (taskRes.error) {
+
+                    // const tempDetails = selectedRowsDetails.map((srd, index) => {
+                    //     if (parseInt(index) === parseInt(round)) {
+                    //         return { progress: 0, docurl: '', error: taskRes.errorText, }
+                    //     }
+                    //     return srd
+                    // })
+                    // setSelectedRowsDetails(tempDetails);
+
+                    setIdeaArray(prev => [...prev, { progress: 0, docurl: '', error: taskRes.errorText, }])
+
+                    clearInterval(taskStatusInterval);
+                    setLoading(false);
+
+                    recurAPIsBasedOnStatus(selectedRows, round + 1);
+                } else {
+                    clearInterval(taskStatusInterval);
+                    setLoading(false);
+
+                    recurAPIsBasedOnStatus(selectedRows, round + 1);
+                }
+            }, 5000);
+
+
         } catch (error) {
 
-        } finally {
-            setLoading(false);
-            setGenerating(false);
         }
     }
 
@@ -133,28 +205,10 @@ function FileSelection() {
         setSheetRows([]);
     }
 
-    const commulativeProgress = () => {
-        if (isGenerating) {
-            return 100
-        }
-        const parameters = [Boolean(selectedFile !== null), Boolean(selectedDestination !== null), Boolean(selectedRows.length > 0)];
-        const completedStepsCount = parameters.filter(Boolean).length;
-        return Math.floor((completedStepsCount / (parameters.length + 1)) * 100);
-
-    }
-
-    const progress = commulativeProgress();
-
     return (
         <div className='p-4'>
             <div>  <h5>File Selection</h5> </div>
             <hr />
-            {progress > 0 &&
-                <div className='mt-4 mb-2'>
-                    <div className="progress">
-                        <div className="progress-bar" role="progressbar" style={{ width: `${progress}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{progress}%</div>
-                    </div>
-                </div>}
             {error && error.length > 0 &&
                 <div className='row mt-4'>
                     <div className='col-md-12'>
@@ -198,6 +252,7 @@ function FileSelection() {
                                             setSelectedRow={setSelectedRow}
                                             selectedRows={selectedRows}
                                             setSelectedRows={setSelectedRows}
+                                            setSelectedRowsDetails={setSelectedRowsDetails}
                                             handleGenerateContent={handleGenerateContent}
                                             rangeDisabled={selectedDestination === null}
                                             setError={setError}
@@ -232,7 +287,7 @@ function FileSelection() {
                     </Loadable>
                 </div>
                 {selectedRows && selectedRows.length > 0 && <div className='col-md-5 col-sm-5 col-xs-12'>
-                    <SpreadsheetDisplay selectedRows={selectedRows} />
+                    <SpreadsheetDisplay selectedRows={selectedRows} selectedRowsDetails={selectedRowsDetails} ideaArray={ideaArray} />
                 </div>}
             </div>
         </div>
