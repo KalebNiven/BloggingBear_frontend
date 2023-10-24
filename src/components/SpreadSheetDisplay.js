@@ -16,6 +16,7 @@ function SpreadsheetDisplay({ selectedRows, selectedRowsDetails, ideaArray }) {
         return ''
     }
 
+
     return (
         <div>
             <div className="card">
@@ -37,7 +38,7 @@ function SpreadsheetDisplay({ selectedRows, selectedRowsDetails, ideaArray }) {
                             <tbody>
                                 {selectedRows.map((row, index) => {
 
-                                    const progress = getProgress('progress', index);
+                                    const progress = getProgress(index);
                                     const error = getValues('error', index);
                                     const docurl = getValues('docurl', index);
 

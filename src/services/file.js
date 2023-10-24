@@ -43,10 +43,10 @@ export async function getTaskStatus(taskId, errorCallback) {
             data: temp
         }
     } catch (error) {
-        console.log(JSON.parse(error.response.data))
+        console.log(error)
         return {
             error: true,
-            errorText: JSON.parse(error.response.data).error
+            errorText: error.response.data.error
         }
     }
 }

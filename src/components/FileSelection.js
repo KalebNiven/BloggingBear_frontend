@@ -111,6 +111,8 @@ function FileSelection() {
             setSelectedRowsDetails(new Array(tempRows.length).fill({ error: '', progress: 0, docurl: '' }))
         }
 
+        setIdeaArray([]);
+
         const tempRows = data.length === 0 ? [...sheetRows] : [...data];
 
         recurAPIsBasedOnStatus([...tempRows], 0);
