@@ -2,7 +2,7 @@
 import React from 'react';
 import RangeSelectionInput from './RangeSelectionInput';
 
-function SpreadsheetActions({ sheetRows, selectedRow, setSelectedRow, selectedRows, setSelectedRows, handleGenerateContent, rangeDisabled, setError, setSelectedRowsDetails }) {
+function SpreadsheetActions({ sheetRows, selectedRow, setSelectedRow, selectedRows, setSelectedRows, handleGenerateContent, rangeDisabled, setError, setSelectedRowsDetails, setIdeaArray }) {
 
   const handleSelectRows = () => {
     const rowRanges = selectedRow.split(',').map(range => range.trim());
@@ -33,7 +33,8 @@ function SpreadsheetActions({ sheetRows, selectedRow, setSelectedRow, selectedRo
       }
     }
     setSelectedRows(newSelectedRows);
-    setSelectedRowsDetails(new Array(newSelectedRows.length).fill({ error: '', progress: 0, docurl: '' }))
+    setSelectedRowsDetails(new Array(newSelectedRows.length).fill({ error: '', progress: 0, docurl: '' }));
+    setIdeaArray([]);
   };
 
   return (

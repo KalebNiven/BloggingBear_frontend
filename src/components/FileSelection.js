@@ -258,6 +258,7 @@ function FileSelection() {
                                             handleGenerateContent={handleGenerateContent}
                                             rangeDisabled={selectedDestination === null}
                                             setError={setError}
+                                            setIdeaArray={setIdeaArray}
                                         />
                                     </div>
                                 </div>
