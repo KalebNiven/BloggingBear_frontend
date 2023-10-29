@@ -2,11 +2,11 @@
 
 import axios from "axios";
 
-
+const API_URL = process.env.REACT_APP_API_URL;
 
 export async function sendTokenToServer(token, client_id) {
   try {
-    const response = await fetch('https://localhost:5000/google-auth', {
+    const response = await fetch(`${API_URL}/google-auth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,8 +24,7 @@ export async function sendTokenToServer(token, client_id) {
 
 export async function fetchSpreadsheetData(sheetUrl, setSpreadsheet) {
   try {
-      // Replace 'https://localhost:5000' with your Flask app's URL
-      const response = await fetch(`https://localhost:5000/get-spreadsheet-data?sheetUrl=${encodeURIComponent(sheetUrl)}`);
+      const response = await fetch(`${API_URL}/get-spreadsheet-data?sheetUrl=${encodeURIComponent(sheetUrl)}`);
       
       if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
@@ -85,7 +84,7 @@ export function  validateAndParseRows(selectedRow, totalRows, spreadsheet) {
 
 export const createDoc = async (title, content, email, setDocUrl) => {
     try {
-      const response = await axios.post('https://localhost:5000/create-doc', {
+      const response = await axios.post(`${API_URL}/create-doc`, {
         title,
         content,
         email,

@@ -1,6 +1,9 @@
 {
   "name": "my-react-app",
   "version": "0.1.0",
+  "engines": {
+    "node": "16.17.0"
+  },
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",

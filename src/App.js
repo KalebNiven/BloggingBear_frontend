@@ -16,13 +16,15 @@ function App() {
     const [maxTokens, setMaxTokens] = useState(750);
     const [email, setEmail] = useState(null);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const handleLoginSuccess = async (response) => {
         console.log('Login Success:', response.profileObj);
         setUserData(response.profileObj);
 
         try {
             const token = response.tokenId; // Adjust this to correctly get the token from the response
-            const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID // replace with your client ID
+            const client_id = process.env.REACT_APP_CLIENT_ID // replace with your client ID
             const data = await sendTokenToServer(token, client_id);
             if (data.email) {
                 setEmail(data.email);
@@ -98,7 +100,7 @@ function App() {
     };
 
     const initiateContentGeneration = (data) => {
-        return axios.post('https://localhost:5000/generate-content', {
+        return axios.post(`${API_URL}/generate-content`, {
             data,
             max_tokens: Number(maxTokens),
         });
@@ -149,7 +151,7 @@ function App() {
             handleLoginSuccess(response);
             // Now you have the token, which can be used to authenticate API requests
             const token = response.tokenId;
-            const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+            const client_id = process.env.REACT_APP_CLIENT_ID;
             sendTokenToServer(token, client_id);
             console.log("Google auth successful, token obtained: ", token);
         } else {
