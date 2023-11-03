@@ -12,7 +12,7 @@ export const handleGeneration = async () => {
 
 		// Step 1: Validate the selected rows
 		const requiredFields = [
-		"Blog Title", "Meta", "Instructions", "Headlines_1", "Keywords_1", "Headlines_2", "Keywords_2"
+		"Blog Title", "Meta", "Style", "Headlines_1", "Keywords_1", "Headlines_2", "Keywords_2"
 		];
 
 		for (const row of selectedRows) {
@@ -30,7 +30,7 @@ export const handleGeneration = async () => {
 			return {
 				'Blog Title': row['Blog Title'],
 				'Meta': row['Meta'],
-				'Instructions': row['Instructions'],
+				'Style': row['Style'],
 				'Headlines_1': row['Headlines_1'],
 				'Keywords_1': row['Keywords_1'],
 				'Headlines_2': row['Headlines_2'],
